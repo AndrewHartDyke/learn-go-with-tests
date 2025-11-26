@@ -1,4 +1,4 @@
-package main
+package dictionary
 
 import "testing"
 
@@ -47,9 +47,8 @@ func TestUpdate(t *testing.T) {
 		definition := "this is a test"
 		dictionary := Dictionary{word: definition}
 		newDefinition := "new definition"
-
-		dictionary.Update(word, newDefinition)
-
+		err := dictionary.Update(word, newDefinition)
+		assertNoError(t, err)
 		assertDefintion(t, dictionary, word, newDefinition)
 	})
 	t.Run("new word", func(t *testing.T) {
@@ -68,8 +67,9 @@ func TestDelete(t *testing.T) {
 	t.Run("delete an existing word", func(t *testing.T) {
 		word := "test"
 		dictionary := Dictionary{word: "this is a test"}
-		dictionary.Delete(word)
-		_, err := dictionary.Search(word)
+		err := dictionary.Delete(word)
+		assertNoError(t, err)
+		_, err = dictionary.Search(word)
 		assertError(t, err, ErrNotFound)
 	})
 	t.Run("delete a non existant word", func(t *testing.T) {
@@ -94,6 +94,13 @@ func assertError(t testing.TB, got, want error) {
 
 	if got != want {
 		t.Errorf("got error %q want %q", got, want)
+	}
+}
+
+func assertNoError(t testing.TB, got error) {
+	t.Helper()
+	if got != nil {
+		t.Fatal("got an error but didn't want one")
 	}
 }
 
