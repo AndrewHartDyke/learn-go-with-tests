@@ -25,10 +25,10 @@ func (c *ConfigurableSleeper) Sleep() {
 
 func Countdown(out io.Writer, sleeper Sleeper) {
 	for i := countdownStart; i > 0; i-- {
-		fmt.Fprintln(out, i)
+		_, _ = fmt.Fprintln(out, i)
 		sleeper.Sleep()
 	}
-	fmt.Fprint(out, finalWord)
+	_, _ = fmt.Fprint(out, finalWord)
 
 }
 
